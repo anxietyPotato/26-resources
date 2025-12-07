@@ -6,7 +6,7 @@
     <div class="container mt-4">
         <h2 class="mb-4">Create Shipment</h2>
 
-        <form action="{{ route('shipments.store') }}" method="POST">
+        <form action="{{ route('shipments.store') }}"  enctype="multipart/form-data" method="POST" >
             @csrf
 
             <div class="mb-3">
@@ -60,8 +60,8 @@
 
             <div class="row">
                 <div class="col-md-12 mb-3">
-                    <label for="images" class="form-label">Upload Images</label>
-                    <input type="file" name="images[]" id="images" class="form-control" multiple accept="image/*">
+                    <label for="documents" class="form-label">Upload Document Images</label>
+                    <input type="file" name="documents[]" id="documents" class="form-control" multiple accept=".jpg,.jpeg,.png,.webp">
                     <small class="text-warning">You can select multiple images at once</small>
                 </div>
             </div>
