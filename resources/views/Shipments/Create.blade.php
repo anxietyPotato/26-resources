@@ -1,6 +1,8 @@
 @extends('layout')
 
 @section('content')
+
+
     <div class="container mt-4">
         <h2 class="mb-4">Create Shipment</h2>
 
@@ -43,6 +45,27 @@
                     <option value="{{ $status }}">{{ ucfirst(str_replace('_', ' ', $status)) }}</option>
                 @endforeach
             </select>
+
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="to_city" class="form-label">To City</label>
+                    <input type="text" name="to_city" id="to_city" class="form-control" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="to_country" class="form-label">To Country</label>
+                    <input type="text" name="to_country" id="to_country" class="form-control" value="USA" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <label for="images" class="form-label">Upload Images</label>
+                    <input type="file" name="images[]" id="images" class="form-control" multiple accept="image/*">
+                    <small class="text-warning">You can select multiple images at once</small>
+                </div>
+            </div>
+
 
             <div class="mb-3">
                 <label for="details" class="form-label">Details</label>
