@@ -61,8 +61,9 @@
             <div class="row">
                 <div class="col-md-12 mb-3">
                     <label for="documents" class="form-label">Upload Document Images</label>
-                    <input type="file" name="documents[]" id="documents" class="form-control" multiple accept=".jpg,.jpeg,.png,.webp">
-                    <small class="text-warning">You can select multiple images at once</small>
+                    <input type="file" name="documents[]" id="documents" class="form-control" multiple accept=".jpg,.jpeg,.png,.webp,.pdf">
+                    <small class="text-warning">You can select multiple images at once,hold CTRL (to select multiple)
+                    hold SHIFT (to select range)</small>
                 </div>
             </div>
 

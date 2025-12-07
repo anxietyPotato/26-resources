@@ -31,7 +31,9 @@ class ShipmentRequest extends FormRequest
             'price'        => 'required|integer|min:0',
             'status'       => 'required|string|in:' . implode(',', \App\Models\Shipment::validStatuses()),
             'details'      => 'nullable|string',
-            'documents.*'  => 'required|array',
+            'documents'   => 'required|array',
+            'documents.*' => 'file|mimes:jpg,jpeg,png,webp,pdf|max:10240',
+
         ];
     }
 }
