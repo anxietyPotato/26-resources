@@ -21,8 +21,20 @@
                             <p class="card-text">
                                 <strong>Status:</strong> {{ $shipment->status}}
                             </p>
-
+                            <p class="card-text">
+                                <strong>From city:</strong> {{ $shipment->from_city}}
+                            </p>
+                            <p class="card-text">
+                                <strong>to city:</strong> {{ $shipment->to_city}}
+                            </p>
+                            <p class="card-text">
+                                <strong>from country:</strong> {{ $shipment->from_country}}
+                            </p>
+                            <p class="card-text">
+                                <strong>to country:</strong> {{ $shipment->to_country}}
+                            </p>
                         </div>
+                        <a href="{{ route('shipments.show', $shipment->id) }}" class="btn btn-primary">View details</a>
                     </div>
                 </div>
             @empty

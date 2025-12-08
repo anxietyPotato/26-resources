@@ -41,37 +41,40 @@ class ShipmentController extends Controller
 
         $shipment = Shipment::create($data);
 
-
         $fileTypes = [
             'application/pdf',
             'application/msword',
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         ];
 
-        // Check uploaded images
         if ($request->hasFile('documents')) {
             foreach ($request->file('documents') as $file) {
-
                 if (str_starts_with($file->getMimeType(), 'image/')) {
-                    dd('image'); // <-- This will work now
-                }
-                elseif (in_array($file->getMimeType(), $fileTypes)) {
+                    $extension = $file->getClientOriginalExtension();
+                    $filename = uniqid() . '.' . $extension;
 
-                    $exstension = $file->getClientOriginalExtension();
-
-                    $filename = uniqid() . '.' . $exstension;
-
-                    $shipments = $file->storeAs("documents/{$shipment->id}", $filename, 'public');
+                    $path = $file->storeAs("images/{$shipment->id}", $filename, 'public');
 
                     ShipmentDocs::create([
-                        'shipment_id' => $shipment->id
-                        , 'doc_name' => $shipments,
+                        'shipment_id' => $shipment->id,
+                        'doc_name' => str_replace('images/', '', $path),
+                    ]);
+                } elseif (in_array($file->getMimeType(), $fileTypes)) {
+                    $extension = $file->getClientOriginalExtension();
+                    $filename = uniqid() . '.' . $extension;
+
+                    $path = $file->storeAs("documents/{$shipment->id}", $filename, 'public');
+                    $path = str_replace('documents/', '', $path);
+
+                    ShipmentDocs::create([
+                        'shipment_id' => $shipment->id,
+                        'doc_name' => $path,
                     ]);
                 }
-
-
             }
         }
+
+        Cache::forget('unassigned_shipments'); // clear cache so new shipment shows
 
         return redirect()
             ->route('shipments.index')
@@ -84,7 +87,7 @@ class ShipmentController extends Controller
      */
     public function show(Shipment $shipment)
     {
-      return view('shipments.show',['shipment' =>$shipment]);
+        return view('shipments.show', compact('shipment'));
     }
 
     /**

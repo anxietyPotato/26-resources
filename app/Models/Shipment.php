@@ -48,5 +48,10 @@ use HasFactory;
         }
         $this->attributes['status'] = $status;
     }
+
+    public function documents()
+    {
+        return $this->hasMany(ShipmentDocs::class);
+    }
 }
 
