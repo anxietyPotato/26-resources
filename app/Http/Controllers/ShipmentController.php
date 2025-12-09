@@ -49,37 +49,49 @@ class ShipmentController extends Controller
 
         if ($request->hasFile('documents')) {
             foreach ($request->file('documents') as $file) {
+
+                $extension = $file->getClientOriginalExtension();
+                $filename = uniqid() . '.' . $extension;
+
+                // IMAGE FILE
                 if (str_starts_with($file->getMimeType(), 'image/')) {
-                    $extension = $file->getClientOriginalExtension();
-                    $filename = uniqid() . '.' . $extension;
 
-                    $path = $file->storeAs("images/{$shipment->id}", $filename, 'public');
+                    $path = $file->storeAs(
+                        "images/{$shipment->id}",
+                        $filename,
+                        'public'
+                    );
 
                     ShipmentDocs::create([
                         'shipment_id' => $shipment->id,
-                        'doc_name' => str_replace('images/', '', $path),
+                        'doc_name' => $path,   // save full path
                     ]);
-                } elseif (in_array($file->getMimeType(), $fileTypes)) {
-                    $extension = $file->getClientOriginalExtension();
-                    $filename = uniqid() . '.' . $extension;
+                }
 
-                    $path = $file->storeAs("documents/{$shipment->id}", $filename, 'public');
-                    $path = str_replace('documents/', '', $path);
+                // DOCUMENT FILE
+                elseif (in_array($file->getMimeType(), $fileTypes)) {
+
+                    $path = $file->storeAs(
+                        "documents/{$shipment->id}",
+                        $filename,
+                        'public'
+                    );
 
                     ShipmentDocs::create([
                         'shipment_id' => $shipment->id,
-                        'doc_name' => $path,
+                        'doc_name' => $path,   // save full path
                     ]);
                 }
             }
         }
 
-        Cache::forget('unassigned_shipments'); // clear cache so new shipment shows
+
 
         return redirect()
             ->route('shipments.index')
             ->with('success', 'Shipment created successfully!');
     }
+
 
 
     /**

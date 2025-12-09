@@ -5,6 +5,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 class Shipment extends Model
 {
@@ -28,6 +29,18 @@ use HasFactory;
         'details',
     ];
 
+
+    public static function booted()
+    {
+       static::created(function ($shipment){
+
+
+           if($shipment->status === self::STATUS_UNASSIGNED){
+               Cache::forget('unassigned-shipments');
+           }
+
+       });
+    }
     public function user()
     {
         return $this->belongsTo(User::class);

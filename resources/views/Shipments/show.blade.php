@@ -1,17 +1,13 @@
-@extends('layout')
+@foreach($shipment->documents as $document)
+    @php
+        $fullPath = $document->doc_name;   // store() already saves full path
+    @endphp
 
-@section('content')
-<div >
-    {{$shipment->from_city}}
-    {{$shipment->to_city}}
-</div>
-@if($shipment->documents && $shipment->documents->count())
-    @foreach($shipment->documents as $document)
-        <a target="_blank" href="{{ asset('storage/documents/' . $document->doc_name) }}">
-            {{ $document->doc_name }}
+    @if(Storage::disk('public')->exists($fullPath))
+        <a target="_blank" href="{{ asset('storage/' . $fullPath) }}">
+            {{ basename($document->doc_name) }}
         </a>
-    @endforeach
-@else
-    <p>No documents found.</p>
-@endif
-@endsection
+    @else
+        <p>Document not found or inaccessible.</p>
+    @endif
+@endforeach
