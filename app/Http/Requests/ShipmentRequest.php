@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Shipment;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -18,7 +19,7 @@ class ShipmentRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array|string>
      */
     public function rules(): array
     {
@@ -29,10 +30,11 @@ class ShipmentRequest extends FormRequest
             'to_city'      => 'required|string|max:64',
             'to_country'   => 'required|string|max:64',
             'price'        => 'required|integer|min:0',
-            'status'       => 'required|string|in:' . implode(',', \App\Models\Shipment::validStatuses()),
+            'status'       => 'required|string|in:' . implode(',', Shipment::validStatuses()),
             'details'      => 'nullable|string',
-            'documents'   => 'required|array',
+            'documents' => 'sometimes|array',
             'documents.*' => 'file|mimes:jpg,jpeg,png,webp,pdf|max:10240',
+            'user_id' => 'nullable|exists:users,id',
 
         ];
     }

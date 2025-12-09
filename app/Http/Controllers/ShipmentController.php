@@ -107,17 +107,59 @@ class ShipmentController extends Controller
      */
     public function edit(Shipment $shipment)
     {
-        //
+      return view('shipments.edit', compact('shipment'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Shipment $shipment)
+    public function update(ShipmentRequest $request, Shipment $shipment)
     {
-        //
-    }
+        // Validate input
+        $data = $request->validated();
 
+        // Preserve user_id if nullable (uncomment if you want to reassign)
+        // $data['user_id'] = auth()->id();
+
+        // Update shipment record
+        $shipment->update($data);
+
+        $fileTypes = [
+            'application/pdf',
+            'application/msword',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        ];
+
+        // Handle new file uploads (optional)
+        if ($request->hasFile('documents')) {
+            // If you want to replace old docs:
+            // $shipment->docs()->delete();
+
+            foreach ($request->file('documents') as $file) {
+                $extension = $file->getClientOriginalExtension();
+                $filename  = uniqid() . '.' . $extension;
+
+                $folder = str_starts_with($file->getMimeType(), 'image/')
+                    ? "images/{$shipment->id}"
+                    : (in_array($file->getMimeType(), $fileTypes)
+                        ? "documents/{$shipment->id}"
+                        : null);
+
+                if ($folder) {
+                    $path = $file->storeAs($folder, $filename, 'public');
+
+                    ShipmentDocs::create([
+                        'shipment_id' => $shipment->id,
+                        'doc_name'    => $path,
+                    ]);
+                }
+            }
+        }
+
+        return redirect()
+            ->route('shipments.index')
+            ->with('success', 'Shipment updated successfully!');
+    }
     /**
      * Remove the specified resource from storage.
      */
