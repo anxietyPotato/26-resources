@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ShipmentRequest;
 use App\Models\Shipment;
 use App\Models\ShipmentDocs;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
 class ShipmentController extends Controller

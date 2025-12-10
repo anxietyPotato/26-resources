@@ -1,6 +1,15 @@
 @extends('layout')
 
 @section('content')
+    @if($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
 
     <div class="container mt-4">
@@ -45,6 +54,19 @@
                     <option value="{{ $status }}">{{ ucfirst(str_replace('_', ' ', $status)) }}</option>
                 @endforeach
             </select>
+
+            @if($errors->has('client_id'))
+                <div class="text-danger">{{ $errors->first('client_id') }}</div>
+            @endif
+
+            <div class="mb-3">
+                <label for="user_id" class="form-label text-info">Cient id</label>
+                <input type="number" name="client_id" id="client_id" class="form-control border-dark" min="0"
+                       value="{{ old('client_id')}}" required>
+
+
+            </div>
+
 
 
             <div class="row">

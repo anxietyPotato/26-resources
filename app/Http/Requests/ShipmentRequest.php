@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Models\Shipment;
+use App\Rules\UserClient;
+use App\Rules\UserDriver;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -34,7 +36,11 @@ class ShipmentRequest extends FormRequest
             'details'      => 'nullable|string',
             'documents' => 'sometimes|array',
             'documents.*' => 'file|mimes:jpg,jpeg,png,webp,pdf|max:10240',
-            'user_id' => 'nullable|exists:users,id',
+            'user_id' => ['sometimes','required',
+                new UserDriver()
+
+            ],
+            'client_id' => ['required', new UserClient],
 
         ];
     }

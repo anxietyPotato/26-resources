@@ -2,6 +2,8 @@
 @extends('layout')
 
 @section('content')
+
+
     <div class="container mt-4">
         <h2 class="mb-4 bg-dark text-white p-2 rounded">Edit Shipment</h2>
 
@@ -51,10 +53,26 @@
                        value="{{ old('price', $shipment->price) ?? ''}}" required>
             </div>
 
+            @if($errors->has('user_id'))
+                {{$errors->first()}}
+            @endif
+
             <div class="mb-3">
                 <label for="user_id" class="form-label text-info">Driver id</label>
                 <input type="number" name="user_id" id="user_id" class="form-control border-dark" min="0"
                        value="{{ old('user_id', $shipment->user_id) ?? ''}}" required>
+            </div>
+
+            @if($errors->has('client_id'))
+                <div class="text-danger">{{ $errors->first('client_id') }}</div>
+            @endif
+
+            <div class="mb-3">
+                <label for="user_id" class="form-label text-info">Cient id</label>
+                <input type="number" name="client_id" id="client_id" class="form-control border-dark" min="0"
+                       value="{{ old('client_id')}}" required>
+
+
             </div>
 
             {{-- Status --}}

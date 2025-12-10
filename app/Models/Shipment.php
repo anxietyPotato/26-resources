@@ -27,6 +27,7 @@ use HasFactory;
         'status',
         'user_id',
         'details',
+        'client_id'
     ];
 
 
