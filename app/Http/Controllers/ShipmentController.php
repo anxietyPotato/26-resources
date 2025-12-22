@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ShipmentRequest;
 use App\Models\Shipment;
 use App\Models\ShipmentDocs;
+use App\Models\User;
+use Illuminate\Container\Attributes\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Gate;
 
 class ShipmentController extends Controller
 {
@@ -26,8 +29,9 @@ class ShipmentController extends Controller
      */
     public function create()
     {
-        return view('shipments.create');
+        Gate::authorize('create-shipment');
 
+        return view('shipments.create');
     }
 
     /**
@@ -35,6 +39,14 @@ class ShipmentController extends Controller
      */
     public function store(ShipmentRequest $request)
     {
+         Gate::authorize('create',Shipment::class);
+
+
+
+
+
+
+
         $data = $request->validated();
         $data['user_id'] = auth()->id();
 
