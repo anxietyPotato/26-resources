@@ -1,3 +1,5 @@
+@php use \App\Models\Shipment ; @endphp
+
 @extends('layout')
 
 @section('content')
@@ -54,6 +56,16 @@
                     <option value="{{ $status }}">{{ ucfirst(str_replace('_', ' ', $status)) }}</option>
                 @endforeach
             </select>
+
+            @if($errors->has('user_id'))
+                {{$errors->first()}}
+            @endif
+
+            <div class="mb-3">
+                <label for="user_id" class="form-label text-info">Driver id</label>
+                <input type="number" name="user_id" id="user_id" class="form-control border-dark" min="0"
+                       value="{{ old('user_id') }}" required>
+            </div>
 
             @if($errors->has('client_id'))
                 <div class="text-danger">{{ $errors->first('client_id') }}</div>
