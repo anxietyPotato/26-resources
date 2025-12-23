@@ -10,6 +10,7 @@ use Illuminate\Container\Attributes\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 
+
 class ShipmentController extends Controller
 {
     /**
@@ -29,7 +30,7 @@ class ShipmentController extends Controller
      */
     public function create()
     {
-        Gate::authorize('create-shipment');
+        $this->authorize('create', Shipment::class);
 
         return view('shipments.create');
     }
@@ -39,12 +40,7 @@ class ShipmentController extends Controller
      */
     public function store(ShipmentRequest $request)
     {
-         Gate::authorize('create',Shipment::class);
-
-
-
-
-
+        $this->authorize('create', Shipment::class);
 
 
         $data = $request->validated();
@@ -110,6 +106,8 @@ class ShipmentController extends Controller
      */
     public function show(Shipment $shipment)
     {
+        $this->authorize('view', $shipment);
+
         return view('shipments.show', compact('shipment'));
     }
 
@@ -118,7 +116,9 @@ class ShipmentController extends Controller
      */
     public function edit(Shipment $shipment)
     {
-      return view('shipments.edit', compact('shipment'));
+        $this->authorize('update', $shipment);
+
+        return view('shipments.edit', compact('shipment'));
     }
 
     /**

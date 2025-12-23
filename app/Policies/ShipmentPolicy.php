@@ -20,9 +20,10 @@ class ShipmentPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Shipment $Shipment): bool
+    public function view(User $user, Shipment $shipment): bool
     {
-        return false;
+        return $user->role === User::ROLE_ADMIN
+            || $shipment->client_id === $user->id;
     }
 
     /**
@@ -36,9 +37,9 @@ class ShipmentPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Shipment $Shipment): bool
+    public function update(User $user, Shipment $shipment): bool
     {
-        return false;
+        return $user->role === User::ROLE_ADMIN;
     }
 
     /**
