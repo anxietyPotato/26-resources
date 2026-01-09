@@ -1,3 +1,4 @@
+@php use App\Models\User; @endphp
 @if(session('success'))
     <div class="alert alert-success">
         {{ session('success') }}
@@ -37,6 +38,21 @@
                         <a href="{{ route('shipments.show', $shipment->id) }}" class="btn btn-primary">View details</a>
                     </div>
                 </div>
+
+                <form method="POST" action="{{ route('shipments.assignUser',[$shipment->id]) }}">
+                    @csrf
+                    <input type="hidden" name="shipment_id" value="{{ $shipment->id }}">
+
+                    <select name="user_id" class="mt-4 form-select" autocomplete="off">
+                        <option value="" disabled selected>None</option>
+
+                        @foreach(User::all() as $user)
+                            <option value="{{ $user->id }}">{{ $user->name }}</option>
+                        @endforeach
+                    </select>
+                    <button type="submit" class="btn btn-success mt-2">Assign</button>
+                </form>
+
             @empty
                 <div class="col-12">
                     <div class="alert alert-info">

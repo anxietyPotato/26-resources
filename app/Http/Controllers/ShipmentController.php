@@ -7,8 +7,10 @@ use App\Models\Shipment;
 use App\Models\ShipmentDocs;
 use App\Models\User;
 use Illuminate\Container\Attributes\Auth;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Http\Request;
 
 
 class ShipmentController extends Controller
@@ -21,7 +23,7 @@ class ShipmentController extends Controller
 
 
 
-        $shipments =Cache::remember('unassigned_shipments',600,fn() =>  Shipment::where('status',Shipment::STATUS_UNASSIGNED)->get());
+        $shipments =Cache::remember('unassigned_shipments',600,fn() =>  Shipment::UnassignedShipments()->get());
         return view('shipments.index',['shipments' =>$shipments ?? 'No shipments found']);
     }
 
@@ -99,8 +101,6 @@ class ShipmentController extends Controller
             ->with('success', 'Shipment created successfully!');
     }
 
-
-
     /**
      * Display the specified resource.
      */
@@ -177,5 +177,16 @@ class ShipmentController extends Controller
     public function destroy(Shipment $shipment)
     {
         //
+    }
+    public function assignUser(Request $request,Shipment $shipment): RedirectResponse
+    {
+        $request->validate(['user_id' => ['required', 'exists:users,id']]);
+
+
+        $shipment->user_id = $request->user_id;
+        $shipment->status = Shipment::STATUS_IN_PROGRESS;
+        $shipment->save();
+
+        return redirect()->back();
     }
 }

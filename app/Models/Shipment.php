@@ -13,6 +13,7 @@ use HasFactory;
 
     const STATUS_UNASSIGNED = 'unassigned';
     const STATUS_PENDING = 'pending';
+    const STATUS_COMPLETED = 'completed';
     const STATUS_IN_PROGRESS = 'in_progress';
     const STATUS_PROBLEM = 'problem';
 
@@ -37,9 +38,16 @@ use HasFactory;
 
 
            if($shipment->status === self::STATUS_UNASSIGNED){
-               Cache::forget('unassigned-shipments');
+               Cache::forget('unassigned_shipments');
            }
 
+       });
+       static::updated(function ($shipment){
+           Cache::forget('unassigned_shipments');
+       });
+
+       static::deleted(function ($shipment){
+           Cache::forget('unassigned_shipments');
        });
     }
     public function user()
@@ -66,6 +74,12 @@ use HasFactory;
     public function documents()
     {
         return $this->hasMany(ShipmentDocs::class);
+    }
+
+    public function scopeUnassignedShipments($query)
+    {
+        return $query->where('status', self::STATUS_UNASSIGNED);
+
     }
 }
 
