@@ -32,24 +32,7 @@ use HasFactory;
     ];
 
 
-    public static function booted()
-    {
-       static::created(function ($shipment){
 
-
-           if($shipment->status === self::STATUS_UNASSIGNED){
-               Cache::forget('unassigned_shipments');
-           }
-
-       });
-       static::updated(function ($shipment){
-           Cache::forget('unassigned_shipments');
-       });
-
-       static::deleted(function ($shipment){
-           Cache::forget('unassigned_shipments');
-       });
-    }
     public function user()
     {
         return $this->belongsTo(User::class);
