@@ -31,6 +31,16 @@ class ShipmentsAssignedList extends Component
            $this->errorMessage = 'invalid operation,cant go into negative amount';
        }
 
+
+    }
+
+    public function validateAmount()
+    {
+        if ($this->amount < 1) {
+            $this->errorMessage = 'invalid operation, amount cant be less than 1';
+        } else {
+            $this->errorMessage = '';
+        }
     }
 
 }
