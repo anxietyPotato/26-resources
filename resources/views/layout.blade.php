@@ -33,8 +33,12 @@
             border: 1px solid #bfa76f; /* subtle silvery-gold border */
         }
         </style>
+
+    @livewireStyles
 </head>
 <body>
 @yield('content')
+
+    @livewireScripts
 </body>
 </html>

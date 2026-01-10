@@ -62,4 +62,5 @@
             @endforelse
         </div>
     </div>
+    <livewire:shipments-assigned-list></livewire:shipments-assigned-list>
 @endsection
